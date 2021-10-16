@@ -1,0 +1,12 @@
+{
+  "name": "yarn-patch-date-fns",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "date-fns": "^2.25.0"
+  },
+  "resolutions": {
+    "date-fns@^2.25.0": "patch:date-fns@npm:2.25.0#.yarn/patches/date-fns-npm-2.25.0-fe211b387d"
+  }
+}

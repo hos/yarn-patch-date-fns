@@ -1,0 +1,23 @@
+#!/bin/bash
+set -o xtrace
+
+rm -rf node_modules;
+
+yarn;
+
+export CURRENT=$(pwd)
+export PATCH_PATH=$(node -e """
+const {path} = $(yarn patch date-fns --json)
+console.log(path)
+""");
+
+cd "$PATCH_PATH";
+# use cp instead of mv because yarn 2/3 don't have unlink for patches
+# https://github.com/yarnpkg/berry/issues/1433#issuecomment-638228579
+for f in esm/**/*.js; do cp -- "$f" "${f%.js}.mjs"; done
+find esm/**/*.mjs -type f -exec sed -i '' -E "s/index.js/index.mjs/g" {} \; 
+
+cd "$CURRENT"
+yarn patch-commit -s $PATCH_PATH
+
+echo "$PATCH_PATH"
